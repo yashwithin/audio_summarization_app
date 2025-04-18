@@ -4,12 +4,11 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Load .env and API key
-load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=GOOGLE_API_KEY)
 
-# Page config
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+
+
+
 st.set_page_config(page_title="Audio Summarizer", layout="centered")
 st.title("🎧 Audio Summarization App")
 
@@ -19,7 +18,7 @@ with st.expander("About"):
     Upload a `.mp3` or `.wav` file and choose your preferred summary style.
     """)
 
-# Summary type selection
+
 summary_type = st.selectbox("Choose Summary Style", ["Brief", "Detailed", "Bullet Points", "Action Items"])
 
 prompt_map = {
@@ -65,7 +64,7 @@ if audio_file is not None:
     if audio_path:
         st.audio(audio_path)
 
-        # Summarize
+    
         if st.button("Summarize Audio"):
             with st.spinner("Summarizing... please wait"):
                 summary_text = summarize_audio(audio_path, prompt_map[summary_type])
@@ -73,5 +72,5 @@ if audio_file is not None:
                 st.subheader("Summary:")
                 st.info(summary_text)
 
-                # Allow download
+                # download
                 st.download_button("⬇️ Download Summary", summary_text, file_name="audio_summary.txt")
